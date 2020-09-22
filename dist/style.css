@@ -1,0 +1,498 @@
+* {
+  box-sizing: border-box;
+  font-family: "ABeeZee", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #f2f2ff;
+  height: 100vh;
+  width: 100vw;
+  padding: 5px;
+  padding-bottom: 20px;
+  overflow: scroll;
+}
+
+#footer {
+  background-color: transparent;
+  display: flex;
+  z-index: 1;
+  position: fixed;
+  bottom: 0;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  width: 100%;
+  height: auto;
+  justify-content: flex-end;
+}
+
+.hidden {
+  display: none !important;
+}
+
+button,
+input {
+  outline: none;
+  color: #0f244a;
+  background-color: #f2f2ff;
+  display: inline-block;
+  padding: 10px;
+}
+
+#nav-bar {
+  width: 100%;
+  height: 60px;
+  text-align: center;
+  background-color: transparent;
+  overflow: hidden;
+  padding-top: 10px;
+}
+
+#nav-bar button,
+#to-top-btn {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: solid 2px white;
+  box-shadow: 2px 2px 5px black;
+}
+
+#nav-bar > input {
+  width: 50%;
+  height: 40px;
+  border-radius: 20px;
+  text-indent: 10px;
+  border: solid 2px white;
+  box-shadow: 1px 1px 5px black;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+input.alerted {
+  border: solid 1px rgb(204, 15, 15) !important;
+  position: relative;
+  animation: shake 0.1s linear;
+  animation-iteration-count: 3;
+}
+@keyframes shake {
+  0% {
+    left: -3px;
+  }
+  100% {
+    right: -3px;
+  }
+}
+
+#nav-bar > input:focus,
+#nav-bar button:active,
+#to-top-btn:active {
+  background-color: #0f244a54;
+  color: #0f244a;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.toggle-btn > span {
+  display: block;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.toggle-btn > span:not(.selected) {
+  display: none;
+  color: #0f244a8a;
+}
+
+.toggle-btn > span.selected {
+  display: block;
+}
+
+#cities-container,
+#current-location-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: minmax(auto, 100px);
+  grid-gap: 20px;
+  padding: 20px;
+  overflow: scroll;
+  justify-items: center;
+}
+
+@media (max-width: 350px) {
+  #cities-container,
+  #current-location-container {
+    padding: 5px;
+  }
+}
+
+#current-location-container .refresh-btn,
+#current-location-container .action-btn {
+  display: none;
+}
+
+.city {
+  border: solid 2px white;
+  border-radius: 20px;
+  box-shadow: 1px 1px 5px black;
+  background-color: transparent;
+  height: fit-content;
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  position: relative;
+  color: #0f244a;
+}
+
+.city > .header {
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "collapsible act-btn"
+    "collapsible refresh";
+  grid-gap: 10px;
+}
+
+.collapsible {
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  grid-area: collapsible;
+}
+.city > .header > .arrow-btn {
+  grid-column: 1;
+}
+
+.weather-info.hidden .collapsible {
+  height: 100%;
+}
+
+.city-name {
+  font-size: large;
+  height: 100%;
+  width: 100%;
+  text-indent: 10px;
+  letter-spacing: 3px;
+}
+
+.action-btn {
+  z-index: 1;
+  grid-area: act-btn;
+  text-align: end;
+}
+
+.refresh-btn {
+  color: black;
+  border-radius: 50%;
+  grid-area: refresh;
+  text-align: end;
+  z-index: 1;
+}
+
+.arrow-btn {
+  float: left;
+}
+
+.refresh-btn:active,
+.action-btn:active {
+  color: white;
+}
+
+.weather-info {
+  text-indent: 10px;
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    "t c c pic"
+    "t c c pic"
+    "h h h pic"
+    "f f f pic"
+    "u u u u";
+}
+
+.temperature {
+  grid-area: t;
+  font-size: large;
+  height: 100%;
+  width: 100%;
+}
+
+.temperature > span,
+.feels-like > span {
+  display: none;
+}
+
+#content[data-temperature-unit="celsius"] .celsius {
+  display: block;
+}
+
+#content[data-temperature-unit="farenheit"] .farenheit {
+  display: block;
+}
+
+.humidity {
+  grid-area: h;
+  font-size: small;
+  height: 100%;
+  width: 100%;
+}
+
+.feels-like {
+  grid-area: f;
+  font-size: small;
+  height: 100%;
+  width: 100%;
+}
+
+.condition {
+  grid-area: c;
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  height: auto;
+  text-align: center;
+}
+
+.condition-pic {
+  grid-area: pic;
+  text-align: end;
+}
+
+.updated-at {
+  grid-area: u;
+  text-align: start;
+  font-size: small;
+  overflow: hidden;
+  color: #0f244aa1;
+}
+
+/* city animation background*/
+.city[data-contype="Snow"] {
+  animation: slide-down 30s linear infinite;
+  background-image: url("../assets/snow.png");
+  background-repeat: repeat-y;
+  background-color: rgb(177 202 234);
+  background-size: cover;
+}
+
+.city[data-contype="Rain"] {
+  animation: slide-down 10s linear infinite;
+  background-image: url("../assets/rain.png");
+  background-repeat: repeat-y;
+  background-color: rgb(139 152 226);
+  background-size: cover;
+}
+
+.city[data-contype="Drizzle"] {
+  animation: slide-down 20s linear infinite;
+  background-image: url("../assets/drizzle.png");
+  background-repeat: repeat-y;
+  background-color: rgb(194 230 247);
+  background-size: cover;
+}
+
+.city[data-contype="Clouds"] {
+  animation: slide-right 40s linear infinite;
+  background-image: url("../assets/clouds.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(199 216 247);
+  background-size: cover;
+}
+
+.city[data-contype="Mist"] {
+  animation: slide-right 40s linear infinite;
+  background-image: url("../assets/mist.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(175 177 210);
+  background-size: cover;
+}
+
+.city[data-contype="Haze"] {
+  animation: slide-right 60s linear infinite;
+  background-image: url("../assets/haze.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(185 177 159);
+  background-size: cover;
+}
+
+.city[data-contype="Squall"] {
+  animation: slide-right 30s linear infinite;
+  background-image: url("../assets/haze.png"), url("../assets/smoke.png"),
+    url("../assets/dust.png"), url("../assets/mist.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(163 175 191);
+  background-size: cover;
+}
+
+.city[data-contype="Tornado"] {
+  animation: tornado 3s linear infinite;
+  background-image: url("../assets/tornado.png"), url("../assets/dust2.png"),
+    url("../assets/volcanic-ash.png");
+  background-position: 0 0;
+  background-color: rgb(193 193 193);
+  background-size: cover;
+}
+
+.city[data-contype="Fog"] {
+  animation: slide-right 50s linear infinite;
+  background-image: url("../assets/haze.png"), url("../assets/smoke.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(214, 214, 214);
+  background-size: cover;
+}
+
+.city[data-contype="Smoke"] {
+  animation: slide-right 40s linear infinite;
+  background-image: url("../assets/smoke.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(168, 158, 158);
+  background-size: cover;
+}
+
+.city[data-contype="Sand"] {
+  animation: slide-right 50s linear infinite;
+  background-image: url("../assets/sand.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(216 195 168);
+  background-size: cover;
+}
+
+.city[data-contype="Dust"] {
+  animation: slide-right 50s linear infinite;
+  background-image: url("../assets/dust.png");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-color: rgb(192, 173, 162);
+  background-size: cover;
+}
+
+.city[data-contype="Thunderstorm"] {
+  animation: thunderstorm 10s linear infinite;
+  background-position: 0 0;
+  background-color: rgb(94 116 199);
+  background-image: url("../assets/thunder3.png");
+  background-position: 0 0;
+  background-size: cover;
+}
+
+.city[data-contype="Clear"] {
+  animation: slide-right 20s linear infinite;
+  background-position: 0 0;
+  background-color: rgb(149 205 253);
+  background-image: url("../assets/clear.png");
+  background-position: 0 0;
+  background-size: cover;
+}
+
+.city[data-contype="Ash"] {
+  animation: slide-right 50s linear infinite;
+  background-position: 0 0;
+  background-color: rgb(119, 109, 109);
+  background-image: url("../assets/volcanic-ash.png");
+  background-position: 0 0;
+  background-size: cover;
+}
+
+@keyframes slide-down {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 1280px;
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1280px 0;
+  }
+}
+
+@keyframes thunderstorm {
+  0% {
+    background-image: url("../assets/thunder1.png");
+  }
+  25% {
+    background-image: url("../assets/thunder2.png");
+  }
+  50% {
+    background-image: url("../assets/thunder1.png");
+    background-size: cover;
+  }
+  100% {
+    background-image: url("../assets/thunder2.png");
+  }
+}
+
+@keyframes tornado {
+  0% {
+    background-image: url("../assets/tornado2.png"), url("../assets/dust2.png"),
+      url("../assets/volcanic-ash.png");
+  }
+  50% {
+    background-image: url("../assets/tornado.png"), url("../assets/dust2.png"),
+      url("../assets/volcanic-ash.png");
+  }
+  100% {
+    background-image: url("../assets/tornado2.png"), url("../assets/dust2.png"),
+      url("../assets/volcanic-ash.png");
+  }
+}
+
+#loader-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+.loader {
+  border: 5px solid #f3f3f3;
+  -webkit-animation: spin 3s linear infinite;
+  animation: spin 1s linear infinite;
+  border-top: 5px solid #9aa1c3;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

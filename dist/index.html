@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link
+      rel="stylesheet"
+      href="/scripts/@fortawesome/fontawesome-free/css/all.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="nav-bar">
+      <button id="location-btn" class="toggle-btn">
+        <span class="selected" data-toggle="current-location"
+          ><i class="fas fa-map-marker-alt"></i
+        ></span>
+        <span data-toggle="searched-locations"
+          ><i class="fas fa-globe-americas"></i
+        ></span>
+      </button>
+      <button id="temp-unit-btn" class="toggle-btn">
+        <span class="selected" data-toggle="celsius">°C</span>
+        <span data-toggle="farenheit">°F</span>
+      </button>
+      <input type="text" name="city-name" />
+      <button id="search-btn"><i class="fas fa-search"></i></button>
+    </div>
+    <div id="content">
+      <div id="cities-container" class="hidden"></div>
+      <div id="current-location-container"></div>
+      <div id="loader-container" class="hidden">
+        <div class="loader"></div>
+    </div>
+      <div id="footer">
+        <button id="to-top-btn" class="hidden">
+          <i class="fas fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+    <script id="city-weather-template" type="text/x-handlebars-template">
+      {{#each cities}}
+      <div class="city {{#if isSaved}}saved{{/if}}" data-name="{{name}}" data-contype="{{conditionType}}">
+      <div class="header">
+        <button class="collapsible">
+        <i class="arrow-btn fas fa-chevron-right"></i>
+        <span class="city-name">{{name}}</span></button>
+        <i class="refresh-btn fas fa-sync-alt"></i>
+      <i class="action-btn fas fa-{{#if isSaved}}minus-circle{{else}}thumbtack{{/if}}"></i>
+      </div>
+      <div class="weather-info hidden">
+        <span class="temperature">
+          <span class="celsius">{{temperature.celsius}}°</span>
+          <span class="farenheit">{{temperature.farenheit}}°</span>
+        </span>
+        <div class="humidity">Humidity: {{humidity}}</div>
+         <div class="feels-like">
+          <span class="celsius">Feels like: {{feelsLike.celsius}}°</span>
+          <span class="farenheit">Feels like: {{feelsLike.farenheit}}°</span>
+         </div>
+        <span class="condition">{{condition}}</span>
+        <img class="condition-pic" src="{{conditionPic}}">
+        <span class="updated-at">Last updated: {{updatedAt}}</span>
+        </div>
+        </div>
+      {{/each}}
+    </script>
+
+    <script src="/scripts/handlebars/dist/handlebars.js"></script>
+    <script src="/scripts/jquery/dist/jquery.js"></script>
+    <script src="./TempManager.js"></script>
+    <script src="./Loader.js"></script>
+    <script src="./LocalStorageManager.js"></script>
+    <script src="./Renderer.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
